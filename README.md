@@ -1,73 +1,112 @@
-# Welcome to your Lovable project
+# DevOps Portfolio Project
 
-## Project info
+This project demonstrates a **complete DevOps monitoring and CI/CD stack**, along with a **Node.js + React application**, running in Docker containers. It is ideal for showcasing **full-stack DevOps skills**.
 
-**URL**: https://lovable.dev/projects/4361f7c6-bccd-495e-bb6c-659b039cf1d7
+---
 
-## How can I edit this code?
+## Project Components
 
-There are several ways of editing your application.
+* **Frontend App:** Node.js, React, TypeScript, Tailwind CSS, shadcn-ui, Vite
+* **Monitoring:** Prometheus, Grafana
+* **Tracing:** Jaeger
+* **CI/CD:** Jenkins
+* **Containerization:** Docker & Docker Compose
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4361f7c6-bccd-495e-bb6c-659b039cf1d7) and start prompting.
+## Local Development
 
-Changes made via Lovable will be committed automatically to this repo.
+You can work on this project locally using your preferred IDE or terminal.
 
-**Use your preferred IDE**
+### 1. Clone the Repository
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+```bash
 git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
 cd <YOUR_PROJECT_NAME>
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+### 2. Install Dependencies
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm install
+```
+
+### 3. Run the App
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Your app will now be accessible at `http://localhost:3000`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## Docker Support
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+This project includes a **Dockerfile** for the frontend app. You can build and run it as a container:
 
-## What technologies are used for this project?
+```bash
+# Build Docker image
+docker build -t pushtest-dev .
+```
 
-This project is built with:
+* **Dockerfile** ensures that the app runs consistently across environments.
+* Works seamlessly with your **Docker Compose stack** for monitoring and CI/CD services.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+---
 
-## How can I deploy this project?
+## VPS Setup & Data Persistence
 
-Simply open [Lovable](https://lovable.dev/projects/4361f7c6-bccd-495e-bb6c-659b039cf1d7) and click on Share -> Publish.
+To ensure your monitoring tools and Jenkins retain data across restarts:
 
-## Can I connect a custom domain to my Lovable project?
+1. SSH into your VPS.
+2. Create a `/data` folder in the root directory:
 
-Yes, you can!
+```bash
+sudo mkdir /data
+cd /data
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+3. Inside `/data`, create persistent storage folders:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+```bash
+sudo mkdir grafana_data jaeger_data jenkins_data prometheus_data
+```
+
+4. (Optional) Set permissions:
+
+```bash
+sudo chown -R $USER:$USER /data/*
+```
+
+These folders will be used by Docker volumes for Grafana, Jaeger, Jenkins, and Prometheus.
+
+---
+
+## Deploying the Full Stack
+
+Using Docker Compose, you can bring up the entire DevOps environment:
+
+```bash
+docker compose up -d
+```
+
+### Access Services
+
+| Service    | URL                      |
+| ---------- | ------------------------ |
+| Grafana    | http\://\<VPS\_IP>:3000  |
+| Prometheus | http\://\<VPS\_IP>:9090  |
+| Jaeger     | http\://\<VPS\_IP>:16686 |
+| Jenkins    | http\://\<VPS\_IP>:8080  |
+
+* Jenkins pipeline can be extended to include **SonarQube analysis**, **build/test stages**, or **dummy long-running tasks**.
+* Grafana dashboards can be connected to **Prometheus and Node Exporter / cAdvisor** for live metrics.
+
+---
+
+## Notes & Tips
+
+* The project is designed for **portfolio showcase**, so visitors can interact with the frontend app, monitoring dashboards, and CI/CD pipelines.
+* Docker volumes ensure **data persistence**, even after container restarts.
+* The **Dockerfile** ensures the frontend app is portable and consistent across environments.
