@@ -1,0 +1,70 @@
+version: '3.9'
+
+services:
+  pushtest:
+    image: pushtest-dev:v2
+    container_name: pushtest
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml 
+      - /data/prometheus_data:/prometheus
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - /data/grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  nodeanytime_server:
+    image: hemantpra/node_anytime_testing:first
+    container_name: nodeserver
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"   # UI
+      - "6831:6831/udp" # Jaeger agent UDP
+      - "6832:6832/udp"
+      - "14268:14268"   # Collector HTTP
+      - "14250:14250"   # gRPC
+    volumes:
+      - /data/jaeger_data:/tmp/jaeger
+    environment:
+      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - /data/jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    network_mode: "host"  # Node Exporter usually needs host network for full metrics
+    restart: unless-stopped
+    pid: "host"
