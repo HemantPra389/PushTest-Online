@@ -89,6 +89,7 @@ Using Docker Compose, you can bring up the entire DevOps environment:
 
 ```bash
 docker compose up -d
+docker build -t pushtest-dev:v2 .
 ```
 
 ### Access Services
