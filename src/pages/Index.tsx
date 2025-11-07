@@ -23,13 +23,13 @@ const tools = [
   {
     name: 'Jenkins',
     description: 'CI/CD automation and deployment pipelines',
-    url: '#',
+    url: 'http://192.168.56.10:8080/',
     icon: '⚙️'
   },
   {
     name: 'Jaeger',
     description: 'Distributed tracing and performance monitoring',
-    url: '#',
+    url: 'http://192.168.56.10:16686/',
     icon: '🔍'
   },
   {
