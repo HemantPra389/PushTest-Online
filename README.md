@@ -47,7 +47,7 @@ This project includes a **Dockerfile** for the frontend app. You can build and r
 
 ```bash
 # Build Docker image
-docker build -t pushtest-dev .
+docker build -t pushtest-dev:v2 .
 ```
 
 * **Dockerfile** ensures that the app runs consistently across environments.
@@ -89,7 +89,6 @@ Using Docker Compose, you can bring up the entire DevOps environment:
 
 ```bash
 docker compose up -d
-docker build -t pushtest-dev:v2 .
 ```
 
 ### Access Services
